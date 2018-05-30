@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@color/colorModified"
+    android:theme="@style/AppTheme1">
+
+    <TextView
+        android:id="@+id/login_arham"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Arham Education"
+        android:layout_marginTop="100dp"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textSize="35dp"
+        android:textColor="#4476e2"/>
+
+    <TextView
+        android:id="@+id/login_competative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Competative Prep"
+        android:layout_below="@+id/login_arham"
+        android:layout_marginLeft="160dp"
+        android:textColor="#db4736"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_competative"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawableStart="@drawable/ic_email_black_24dp"
+        android:hint=" Email address/username"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_username"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawableStart="@drawable/ic_lock_black_24dp"
+        android:hint=" Password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/login_btnsignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_password"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="Sign in"
+        android:textColor="#545556"
+        android:background="@drawable/mybutton"
+        android:onClick="login"/>
+
+
+    <RelativeLayout
+        android:layout_below="@+id/login_btnsignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:id="@+id/forget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forget Password?"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/login_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New User? Sign up"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentRight="true"
+            android:onClick="login_signin"/>
+
+    </RelativeLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>
