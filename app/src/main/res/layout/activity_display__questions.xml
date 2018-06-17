@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Display_Questions">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        style="@style/HeaderBar"
+        app:theme="@style/ActionBarThemeOverlay"
+        app:popupTheme="@style/ActionBarPopupThemeOverlay"
+
+        app:title="">
+
+        <ImageButton
+            android:layout_marginLeft="-20dp"
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cancel_black_24dp"
+            android:background="@color/colorPrimary"
+            />
+
+        <TextView
+            android:padding="10dp"
+            android:id="@+id/text_toolbar"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Utsav"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:shadowColor="#e5e8e1"
+            android:textColor="#ffffff"/>
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:layout_below="@+id/my_toolbar"
+        android:id="@+id/question_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+
+
+</RelativeLayout>

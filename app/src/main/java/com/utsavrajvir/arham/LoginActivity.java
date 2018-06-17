@@ -1,10 +1,14 @@
 package com.utsavrajvir.arham;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -26,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     JSONObject jsonObject1;
     JSONArray jsonArray1;
     String json_string;
-
+    String name;
 
 
     ProgressBar progressBar;
@@ -99,7 +103,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     JSONObject jo = jsonArray1.getJSONObject(0);
 
-                    String name = jo.getString("St_Name");
+                     name = jo.getString("St_Name");
+                    String EmailVerification = jo.getString("St_EmailVerified");
+                    String MobileVerification = jo.getString("St_MobileVerified");
+                    String St_Id = jo.getString("St_Id");
+
+
+                    pref.edit().putString("MobileVerification",MobileVerification).apply();
+                    pref.edit().commit();
+
+                    pref.edit().putString("St_Id",St_Id).apply();
+                    pref.edit().commit();
 
 
 
@@ -114,63 +128,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 finish();
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this,MainActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("email",email1);
+                startActivity(intent);
             }
 
-            //startActivity(new Intent(this,MainActivity.class));
-
-            //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-
-            /*Bundle bundle = new Bundle();
-            bundle.putString("json_data", s);
-
-            // set Fragmentclass Arguments
-            FragmentOne fragobj = new FragmentOne();
-            fragobj.setArguments(bundle);
-*/
-
-
-  //
-
-/*
-            Intent intent = new Intent(this,MainActivity.class);
-            //intent.putExtra("json_data",s);
-            startActivity(intent);
-*/
-
-            /*String s_id=null;
-            try {
-                jsonObject = new JSONObject(s);
-                jsonArray = jsonObject.getJSONArray("result");
-                int count=0;
-
-                while(count < jsonArray.length())
-                {
-                    JSONObject jo = jsonArray.getJSONObject(count);
-                    s_id = jo.getString("St_Id");
-                    count++;
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            progressBar.setVisibility(View.GONE);
-
-            if(pref.getString("result","sry").equals("Exist")) {
-
-                Toast.makeText(this, "User Exist", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(this, pref.getString("reply", "sry"), Toast.LENGTH_SHORT).show();
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            }
-
-            Toast.makeText(this, s_id, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, pref.getString("reply", "sry"), Toast.LENGTH_SHORT).show();
-            // check in database
-            */
         }
 
 

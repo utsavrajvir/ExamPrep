@@ -39,6 +39,7 @@ public class FragmentOne extends Fragment {
         listView = (ListView)view.findViewById(R.id.listview);
         contactAdapter = new ContactAdapter(getContext().getApplicationContext(),R.layout.row_layout);
         listView.setAdapter(contactAdapter);
+
         json_string = getArguments().getString("json_data");
 
 
@@ -49,14 +50,18 @@ public class FragmentOne extends Fragment {
 
                 Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
+
+                //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
+
                 Intent appInfo = new Intent(getContext().getApplicationContext(), testing.class);
-                appInfo.putExtra("testing",ss.getM_Name());
-                //appInfo.putExtra("json",json_string);
+
+                appInfo.putExtra("M_Cid",ss.getM_Cid());
+                appInfo.putExtra("M_Name",ss.getM_Name());
+                appInfo.putExtra("M_Time",ss.getM_Time());
+
                 startActivity(appInfo);
 
                 //startActivityForResult(appInfo,1);
-
-               // Toast.makeText(getContext().getApplicationContext(), ss.getS_id(), Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -1,12 +1,14 @@
 package com.utsavrajvir.arham;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,7 +18,8 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-public class Sub_Category extends AppCompatActivity {
+public class category extends AppCompatActivity {
+
 
     String json_string = null;
     JSONObject jsonObject1;
@@ -24,15 +27,11 @@ public class Sub_Category extends AppCompatActivity {
     ContactAdapter contactAdapter;
     ListView listView;
     private View view;
-    String C_Id, M_Cid,T_Id;
-    String Sc_id;
-    String Sc_Name;
-    String Sc_Time;
-    String C_Time;
-
+    String T_id,M_Cid,M_Time;
+    Button button;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub__category);
 
@@ -42,12 +41,30 @@ public class Sub_Category extends AppCompatActivity {
         contactAdapter = new ContactAdapter(this,R.layout.row_layout);
         listView.setAdapter(contactAdapter);
 
+        button = (Button)findViewById(R.id.new_button);
 
 
-       C_Id = getIntent().getExtras().getString("C_Id");
+
+        T_id = getIntent().getExtras().getString("T_id");
          M_Cid = getIntent().getExtras().getString("M_Cid");
-         T_Id = getIntent().getExtras().getString("T_Id");
-         C_Time = getIntent().getExtras().getString("C_Time");
+        M_Time = getIntent().getExtras().getString("M_Time");
+
+
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(),Instruction.class);
+                intent.putExtra("M_id",M_Cid);
+                intent.putExtra("T_id",T_id);
+                intent.putExtra("M_Time",M_Time);
+                intent.putExtra("cat","category");
+                startActivity(intent);
+
+            }
+        });
 
 
         String s=null;
@@ -55,7 +72,7 @@ public class Sub_Category extends AppCompatActivity {
         BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
-            s = backgroundTask.execute("sub_category",C_Id).get();
+            s = backgroundTask.execute("category",M_Cid).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -64,12 +81,12 @@ public class Sub_Category extends AppCompatActivity {
 
         //json_string = getIntent().getExtras().getString("json_data");
 
-        Toast.makeText(this, M_Cid + " "+ T_Id + " "+C_Id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, M_Cid + " " + M_Time + " "+T_id, Toast.LENGTH_SHORT).show();
 
 
-        Sc_id=null;
-        Sc_Name=null;
-        Sc_Time=null;
+        String C_id=null;
+        String C_Name=null;
+        String C_Time=null;
         try {
             jsonObject1 = new JSONObject(s);
             jsonArray1 = jsonObject1.getJSONArray("result");
@@ -78,10 +95,10 @@ public class Sub_Category extends AppCompatActivity {
             while(count < jsonArray1.length())
             {
                 JSONObject jo = jsonArray1.getJSONObject(count);
-                Sc_id = jo.getString("Sc_Id");
-                Sc_Name = jo.getString("Sc_Name");
-                Sc_Time = jo.getString("Sc_Time");
-                Contacts contacts = new Contacts(Sc_id,Sc_Name,Sc_Time);
+                C_id = jo.getString("C_id");
+                C_Name = jo.getString("C_Name");
+                C_Time = jo.getString("C_Time");
+                Contacts contacts = new Contacts(C_id,C_Name,C_Time);
                 contactAdapter.add(contacts);
                 count++;
             }
@@ -90,7 +107,6 @@ public class Sub_Category extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -98,29 +114,25 @@ public class Sub_Category extends AppCompatActivity {
 
                 Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
+
                 //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
 
-                Intent appInfo = new Intent(getApplicationContext(), Instruction.class);
+                Intent appInfo = new Intent(getApplicationContext(), Sub_Category.class);
 
-                appInfo.putExtra("M_id",M_Cid);
-                appInfo.putExtra("T_id",T_Id);
-                appInfo.putExtra("cat","sub_category1");
-
-                appInfo.putExtra("Sc_Id",ss.getM_Cid());
-                appInfo.putExtra("Sc_Time",ss.getM_Time());
-                appInfo.putExtra("C_id",C_Id);
-
-
+                appInfo.putExtra("C_Id",ss.getM_Cid());
+                appInfo.putExtra("M_Cid",M_Cid);
+                appInfo.putExtra("T_Id",T_id);
+                appInfo.putExtra("C_Time",ss.getM_Time());
+                appInfo.putExtra("cat","category");
                 startActivity(appInfo);
 
-
-
+                //startActivityForResult(appInfo,1);
 
             }
         });
 
-    }
 
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -135,23 +147,4 @@ public class Sub_Category extends AppCompatActivity {
     }
 
 
-    public void Questions(View view) {
-
-
-        Intent intent = new Intent(this,Instruction.class);
-        intent.putExtra("M_id",M_Cid);
-        intent.putExtra("T_id",T_Id);
-        intent.putExtra("C_id",C_Id);
-        intent.putExtra("C_Time",C_Time);
-        intent.putExtra("cat","sub_category");
-        startActivity(intent);
-
-        /*Intent intent = new Intent(this,Display_Questions.class);
-
-        intent.putExtra("M_id",M_Cid);
-        intent.putExtra("T_id",T_Id);
-
-        startActivity(intent);
-*/
-    }
 }

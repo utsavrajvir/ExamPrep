@@ -1,10 +1,15 @@
 package com.utsavrajvir.arham;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +20,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
@@ -25,14 +32,23 @@ public class MainActivity extends AppCompatActivity
     static String json_string1 = null;
     ProgressBar progressBar1;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String name,email;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-progressBar1 = (ProgressBar)findViewById(R.id.main_progress);
+        progressBar1 = (ProgressBar)findViewById(R.id.main_progress);
+
+        pref = getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
+        editor  = pref.edit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,10 +56,61 @@ progressBar1 = (ProgressBar)findViewById(R.id.main_progress);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        name = getIntent().getExtras().getString("name");
+        email = getIntent().getExtras().getString("email");
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+        TextView name1 = (TextView)header.findViewById(R.id.drawer_username);
+        TextView email1 = (TextView)header.findViewById(R.id.drawer_email);
+        name1.setText(name);
+        email1.setText(email);
 
         //json_string1 = getIntent().getExtras().getString("json_data");
+
+
+        if(pref.getString("MobileVerification","sry").equals("0"))
+        {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("Mobile Verification...");
+
+            // Setting Dialog Message
+            alertDialog.setMessage("We Will Verfing Phone Number:\n8866602016 \nIs this OK, or would you like to edit the number ?");
+
+            // Setting Icon to Dialog
+            // alertDialog.setIcon(R.drawable.delete);
+
+            // Setting Positive "Yes" Button
+            alertDialog.setPositiveButton("Edit/Verify", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+
+
+                    startActivity(new Intent(getApplicationContext(),Verification.class));
+                    // Write your code here to invoke YES event
+                    Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // Setting Negative "NO" Button
+            alertDialog.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Write your code here to invoke NO event
+                    Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+
+                    dialog.cancel();
+                }
+            });
+
+            // Showing Alert Message
+            alertDialog.show();
+
+        }
+
+
 
         BackgroundTask backgroundTask = new BackgroundTask(this);
 
@@ -67,6 +134,7 @@ progressBar1 = (ProgressBar)findViewById(R.id.main_progress);
 
         TabLayout tbl_pages= (TabLayout) findViewById(R.id.tbl_pages);
         tbl_pages.setupWithViewPager(vp_pages);
+
 
     }
 

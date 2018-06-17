@@ -3,12 +3,31 @@
     <!-- Base application theme. -->
 
 
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+    <style name="ActionBarThemeOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+
+        <item name="android:background">#303F9F</item>
+
+    </style>
+
+
+    <style name="ActionBarPopupThemeOverlay" parent="AppTheme.PopupOverlay">
+
+        <item name="android:background">#303F9F</item>
+
+    </style>
+
 
     <style name="AppTheme1" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
