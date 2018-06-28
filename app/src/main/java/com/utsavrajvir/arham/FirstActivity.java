@@ -22,10 +22,13 @@ public class FirstActivity extends AppCompatActivity {
         pref = getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
         editor  = pref.edit();
 
-        /*if(pref.getString("result","sry").equals("Exist")) {
+        if(pref.getString("result","sry").equals("Exist")) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
-        }*/
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra("name",pref.getString("Name","sry"));
+            intent.putExtra("email",pref.getString("Email","sry"));
+            startActivity(intent);
+        }
 
     }
 

@@ -9,23 +9,18 @@
         <item
             android:id="@+id/invite_frnd"
             android:icon="@drawable/ic_people_outline_black_24dp"
-            android:title="Tools" />
+            android:title="Invite Friends" />
 
         <item
             android:id="@+id/verify"
             android:icon="@drawable/ic_check_black_24dp"
-            android:title="Tools" />
-
-        <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Share" />
+            android:title="Verify Mobile" />
 
 
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="LogOut" />
 
     </group>
 

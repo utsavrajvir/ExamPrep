@@ -6,8 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".Verification">
 
+    <TextView
+        android:id="@+id/instructions"
+        android:text="You Would have received an SMS with code,\n We Will try to read but if could not you can also enter it."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        />
+
+
     <EditText
-        android:id="@+id/verification_text"
+        android:id="@+id/phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Mobile"
@@ -15,7 +26,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="60dp"/>
+
+
+    <EditText
+        android:layout_below="@id/phone_number"
+        android:id="@+id/verification_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="OTP"
+        android:height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"/>
+
 
 
     <Button
@@ -23,13 +49,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Get OTP"
-        android:layout_below="@+id/verification_text"
+        android:layout_below="@+id/phone_number"
         android:background="@drawable/mybutton"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:onClick="send"/>
 
+    <Button
+        android:id="@+id/verification_button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@+id/verification_text"
+        android:background="@drawable/mybutton"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:onClick="Submit"
+        android:visibility="gone"/>
 
-
+    <TextView
+        android:id="@+id/resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/verification_button1"
+        android:onClick="send"
+        android:text="Resend OTP"
+        android:visibility="gone"/>
 
 </RelativeLayout>

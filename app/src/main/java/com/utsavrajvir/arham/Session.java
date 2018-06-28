@@ -129,14 +129,14 @@ public class Session {
 
 
         // After logout redirect user to Loing Activity
-        Intent i = new Intent(context, LoginActivity.class);
+        Intent i = new Intent(context, FirstActivity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Toast.makeText(context, IS_LOGIN, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, IS_LOGIN, Toast.LENGTH_SHORT).show();
         // Staring Login Activity
         context.startActivity(i);
     }

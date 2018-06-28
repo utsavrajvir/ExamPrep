@@ -3,6 +3,7 @@ package com.utsavrajvir.arham;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,11 +37,14 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences.Editor editor;
     String name,email;
 
+    Session session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             alertDialog.setTitle("Mobile Verification...");
 
             // Setting Dialog Message
-            alertDialog.setMessage("We Will Verfing Phone Number:\n8866602016 \nIs this OK, or would you like to edit the number ?");
+            alertDialog.setMessage("We Will Verfing Phone Number:\n"+ pref.getString("St_MobileNo","sry") +"\nIs this OK, or would you like to edit the number ?");
 
             // Setting Icon to Dialog
             // alertDialog.setIcon(R.drawable.delete);
@@ -177,16 +181,49 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.invite_frnd) {
-            // Handle the camera action
+            String smsEditText = "I am preparing for Competative 2018  Exam Prep with Arham App. Are you preparing for any competative exam? With Prep App,yes you can. Download today Link...";
+
+
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            //smsIntent.putExtra("address", "12125551212");
+            smsIntent.putExtra("sms_body",smsEditText);
+            startActivity(smsIntent);
+/*
+            // Find the sms_message view.
+            String smsEditText = "I am preparing for Competative 2018  Exam Prep with Arham App. Are you preparing for any competative exam? With Prep App,yes you can. Download today Link...";
+            String smsNumber = "9924848640";
+            // Get the text of the sms message.
+            String sms = smsEditText;
+            // Create the intent.
+            Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+            // Set the data for the intent as the phone number.
+            smsIntent.setData(Uri.parse(smsNumber));
+            // Add the message (sms) with the key ("sms_body").
+            smsIntent.putExtra("sms_body", sms);
+            // If package resolves (target app installed), send intent.
+            if (smsIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(smsIntent);
+            } else {
+                Log.i("sms", "Can't resolve app for ACTION_SENDTO Intent");
+            }
+*/
+
+            /*Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+            sendIntent.setData(Uri.parse("9924848640"));
+            sendIntent.putExtra("sms_body", smsEditText);
+            startActivity(sendIntent);
+*/
         } else if (id == R.id.logout) {
+            finish();
+            session = new Session(this);
+            session.logoutUser();
 
         } else if (id == R.id.verify) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_share) {
-
+                startActivity(new Intent(this,Verification.class));
         }
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

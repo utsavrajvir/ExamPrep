@@ -577,6 +577,59 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 e.printStackTrace();
             }
         }
+        else  if(str.equals("verify")) {
+
+            String id = voids[1];
+
+            Log.i("utsav", "if..Verify");
+            try {
+
+                String login_url = "http://192.168.43.54:80/arham/verify.php";
+
+
+                URL url = new URL(login_url);
+
+                JSONObject json_object = new JSONObject();
+                json_object.put("St_Id", id);
+
+                String message = json_object.toString();
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+
+                OutputStream out = new BufferedOutputStream(httpURLConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(json_object.toString());
+                writer.close();
+                out.close();
+
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                String inputLine;
+                response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                Log.i("response", response.toString());
+
+
+
+                in.close();
+                return response.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
 
 
 

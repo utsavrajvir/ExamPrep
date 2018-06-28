@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     String EmailVerification = jo.getString("St_EmailVerified");
                     String MobileVerification = jo.getString("St_MobileVerified");
                     String St_Id = jo.getString("St_Id");
+                    String St_MobileNo = jo.getString("St_MobileNo");
 
 
                     pref.edit().putString("MobileVerification",MobileVerification).apply();
@@ -115,6 +116,15 @@ public class LoginActivity extends AppCompatActivity {
                     pref.edit().putString("St_Id",St_Id).apply();
                     pref.edit().commit();
 
+
+                    pref.edit().putString("Name",name).apply();
+                    pref.edit().commit();
+
+                    pref.edit().putString("Email",email1).apply();
+                    pref.edit().commit();
+
+                    pref.edit().putString("St_MobileNo",St_MobileNo).apply();
+                    pref.edit().commit();
 
 
                     Toast.makeText(this, email1 + " " + name, Toast.LENGTH_SHORT).show();
@@ -129,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 finish();
                 Intent intent = new Intent(this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("name",name);
                 intent.putExtra("email",email1);
                 startActivity(intent);
