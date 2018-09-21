@@ -29,7 +29,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
 
     SharedPreferences pref;
     URL url = null;
-
+    String ip = "http://192.168.43.54:80/arham/";
     Context ctx;
 
     //Session session;
@@ -70,8 +70,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav","if..login");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/login.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/login.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -100,19 +100,24 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                     response.append(inputLine);
                 }
 
-                Log.i("response",response.toString());
+                Log.i("response1",response.toString()+"utsav");
 
                 pref.edit().putString("reply", response.toString()).apply();
 
+                //Log.i("ans", String.valueOf(!(response.equals("try again"))));
 
 
-                if (!response.equals("try again")) {
-                   // session.createLoginSession(email_id);
-                    pref.edit().putString("result", "Exist").apply();
+                if (response.toString().equals("try again"))
+                {
+
+                    pref.edit().putString("result", "Invalid UserName or Password").apply();
                     pref.edit().apply();
                     pref.edit().commit();
+
                 } else {
-                    pref.edit().putString("result", "Invalid UserName or Password").apply();
+
+                    // session.createLoginSession(email_id);
+                    pref.edit().putString("result", "Exist").apply();
                     pref.edit().apply();
                     pref.edit().commit();
 
@@ -137,8 +142,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav","if..main");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/main_category.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/main_category.php";
+                String login_url = ip + "main_category" +".php";
 
                 URL url = new URL(login_url);
 
@@ -188,8 +193,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav","if..test");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/test.php";
-
+               // String login_url = "http://192.168.43.54:80/arham/test.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -243,8 +248,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav","if..Category");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/category.php";
-
+               // String login_url = "http://192.168.43.54:80/arham/category.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -298,8 +303,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Sub_Category");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/sub_category.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/sub_category.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -366,8 +371,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Question");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/question2.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/question2.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -423,8 +428,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Question");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/question3.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/question3.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -481,8 +486,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Question4");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/question4.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/question4.php";
+                String login_url = ip + str +".php";
 
                 URL url = new URL(login_url);
 
@@ -538,8 +543,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Question4");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/stud_history.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/stud_history.php";
+                String login_url = ip + "stud_history" +".php";
 
                 URL url = new URL(login_url);
 
@@ -562,11 +567,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-
                 Log.i("response", response.toString());
-
-
-
   //              in.close();
                 return response.toString();
 
@@ -584,8 +585,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             Log.i("utsav", "if..Verify");
             try {
 
-                String login_url = "http://192.168.43.54:80/arham/verify.php";
-
+                //String login_url = "http://192.168.43.54:80/arham/verify.php";
+                String login_url = ip + "verify" +".php";
 
                 URL url = new URL(login_url);
 
@@ -603,7 +604,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 writer.write(json_object.toString());
                 writer.close();
                 out.close();
-
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
                 String inputLine;
@@ -629,7 +629,150 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 e.printStackTrace();
 
             }
+        }else  if(str.equals("SignUp"))
+        {
+            String name1 = voids[1];
+            String username1 = voids[2];
+
+            String email_id = voids[3];
+            String password = voids[4];
+
+            String mobile = voids[5];
+
+
+            Log.i("SignUp","if..SignUp");
+            try {
+
+                //String login_url = "http://192.168.43.54:80/arham/register.php";
+                String login_url = ip + "register" +".php";
+
+                URL url = new URL(login_url);
+
+                JSONObject json_object = new JSONObject();
+
+                json_object.put("name1", name1);
+                json_object.put("username1", username1);
+                json_object.put("email_id", email_id);
+                json_object.put("password", password);
+                json_object.put("mobile", mobile);
+
+
+                String message = json_object.toString();
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+
+                OutputStream out = new BufferedOutputStream(httpURLConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(json_object.toString());
+                writer.close();
+                out.close();
+
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                String inputLine;
+                response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                Log.i("sresult",response.toString());
+
+
+                in.close();
+                return response.toString();
+
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+
+        }else  if(str.equals("check"))
+        {
+
+
+           /* String name1 = voids[1];
+            String username1 = voids[2];
+
+            String email_id = voids[3];
+            String password = voids[4];
+
+            String mobile = voids[5];
+*/
+
+            Log.i("SignUp","if..SignUp");
+            try {
+
+                //String login_url = "http://192.168.43.54:80/arham/check.php";
+                String login_url = ip + "check" +".php";
+
+                URL url = new URL(login_url);
+
+               /* JSONObject json_object = new JSONObject();
+
+                json_object.put("name1", name1);
+                json_object.put("username1", username1);
+                json_object.put("email_id", email_id);
+                json_object.put("password", password);
+                json_object.put("mobile", mobile);
+*/
+
+              //  String message = json_object.toString();
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+
+               /* OutputStream out = new BufferedOutputStream(httpURLConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(json_object.toString());
+                writer.close();
+                out.close();
+*/
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                String inputLine;
+                response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                Log.i("sresult",response.toString());
+
+                if(!response.toString().trim().equals("try again"))
+                {
+                    pref.edit().putString("check", "Exist").apply();
+                    pref.edit().apply();
+                    pref.edit().commit();
+                }else {
+                    pref.edit().putString("check", "Sry").apply();
+                    pref.edit().apply();
+                    pref.edit().commit();
+                }
+
+
+                in.close();
+                return response.toString();
+
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
+
 
 
 
