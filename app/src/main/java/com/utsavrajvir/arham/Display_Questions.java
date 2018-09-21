@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class Display_Questions extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     JSONArray jsonArray;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class Display_Questions extends AppCompatActivity {
 
         Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mTopToolbar);
+
+        progressBar = (ProgressBar)findViewById(R.id.progress_question);
 
         radio = (RadioGroup)findViewById(R.id.radioGroup);
 
@@ -87,7 +91,7 @@ public class Display_Questions extends AppCompatActivity {
                     public void onClick(DialogInterface dialog,int which) {
 
                         // Write your code here to invoke YES event
-                        Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -95,9 +99,9 @@ public class Display_Questions extends AppCompatActivity {
                 alertDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to invoke NO event
-                        Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
 
-                        int i = questionsAdapter.getCount()-1;
+                        /*int i = questionsAdapter.getCount()-1;
                         int count =0;
 
                        jsonArray = new JSONArray();
@@ -127,24 +131,24 @@ public class Display_Questions extends AppCompatActivity {
                         //Log.i("json_array",jsonObject.toString());
                         Log.i("json_array1",jsonArray.toString());
 
-                       /* JSONObject jsonObject = null;
+                       *//* JSONObject jsonObject = null;
 
                         try {
                            jsonObject.put("result",jsonArray.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }*/
+                        }*//*
 
                         //Log.i("json_array",jsonObject.toString());
                        // Log.i("json_array1",jsonArray.toString());
 
-                        Toast.makeText(Display_Questions.this, jsonArray.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(Display_Questions.this, jsonArray.toString(), Toast.LENGTH_SHORT).show();
 
 
                        BackgroundTask backgroundTask1 = new BackgroundTask(getApplicationContext());
 
                         backgroundTask1.execute("student_history",jsonArray.toString());
-
+*/
                         NavUtils.navigateUpFromSameTask(Display_Questions.this);
 
                         dialog.cancel();
@@ -162,35 +166,6 @@ public class Display_Questions extends AppCompatActivity {
         questionsAdapter = new QuestionsAdapter(this,R.layout.display_question_row);
         listView.setAdapter(questionsAdapter);
 
-
-/*
-
-        radio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int i = radio.getCheckedRadioButtonId();
-
-                RadioButton radioButton = (RadioButton) findViewById(i);
-
-
-
-                if(radioButton.isChecked())
-                     Toast.makeText(Display_Questions.this,radioButton.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
-*/
-
-        /*
-        radioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-            }
-        });
-*/
 
         //Toast.makeText(Display_Questions.this, radioButton.getText(), Toast.LENGTH_SHORT).show();
 
@@ -214,13 +189,18 @@ public class Display_Questions extends AppCompatActivity {
 
         String s=null;
 
+        progressBar.setVisibility(View.VISIBLE);
+
         BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
             if(cat.equals("category"))
             {
+                Toast.makeText(this, "Enter....Mid = "+M_Cid+" T_id = "+T_id, Toast.LENGTH_SHORT).show();
                 M_Time = getIntent().getExtras().getString("M_Time");
                 s = backgroundTask.execute("question2",M_Cid,T_id).get();
+
+                Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             }
             else if(cat.equals("sub_category"))
             {
@@ -242,9 +222,10 @@ public class Display_Questions extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
         //json_string = getIntent().getExtras().getString("json_data");
 
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
 
         String Q_id=null;
@@ -278,6 +259,8 @@ public class Display_Questions extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -393,5 +376,46 @@ public class Display_Questions extends AppCompatActivity {
 
         String timeString = hours + ":" + minutes + ":" + seconds;
         return timeString;
+    }
+
+    public void submit(View view) {
+
+        int i = questionsAdapter.getCount()-1;
+        int count =0;
+
+        jsonArray = new JSONArray();
+        Questions questions = new Questions();
+
+        while(i-- >= 0)
+        {
+            JSONObject  json_object  = new JSONObject();
+            try {
+
+                questions = (Questions) questionsAdapter.getItem(count++);
+
+
+                json_object.put("St_Id", pref.getString("St_Id","-1"));
+                json_object.put("Qc_Id", questions.getQ_id());
+                json_object.put("Stud_Answer", questions.getStud_answer());
+
+                //Toast.makeText(this, pref.getString("St_Id","-1") + questions.getQ_id() + questions.getStud_answer(), Toast.LENGTH_SHORT).show();
+
+                jsonArray.put(json_object);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        Log.i("json_array1",jsonArray.toString());
+
+        BackgroundTask backgroundTask1 = new BackgroundTask(getApplicationContext());
+        backgroundTask1.execute("student_history",jsonArray.toString());
+
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("name",pref.getString("Name","sry"));
+        intent.putExtra("name",pref.getString("Email","sry"));
+        startActivity(intent);
+
     }
 }

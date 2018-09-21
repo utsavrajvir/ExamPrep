@@ -1,7 +1,11 @@
 package com.utsavrajvir.arham;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FragmentOne extends Fragment {
 
     String json_string;
@@ -26,15 +32,19 @@ public class FragmentOne extends Fragment {
     ListView listView;
     private View view;
 
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view =  inflater.inflate(R.layout.activity_display_list_view,container,false);
 
 
+        pref = getActivity().getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
+        editor  = pref.edit();
 
         listView = (ListView)view.findViewById(R.id.listview);
         contactAdapter = new ContactAdapter(getContext().getApplicationContext(),R.layout.row_layout);
@@ -48,26 +58,43 @@ public class FragmentOne extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                Contacts ss = (Contacts) parent.getItemAtPosition(position);
+                ConnectivityManager conMgr = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+                NetworkInfo wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if(netInfo == null || wifi == null ){
 
 
-                //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(),Network.class);
+                    intent.putExtra("name","Main");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
 
-                Intent appInfo = new Intent(getContext().getApplicationContext(), testing.class);
+                }else{
 
-                appInfo.putExtra("M_Cid",ss.getM_Cid());
-                appInfo.putExtra("M_Name",ss.getM_Name());
-                appInfo.putExtra("M_Time",ss.getM_Time());
+                    Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
-                startActivity(appInfo);
+
+                    //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
+
+                    Intent appInfo = new Intent(getContext().getApplicationContext(), testing.class);
+
+                    appInfo.putExtra("M_Cid",ss.getM_Cid());
+                    appInfo.putExtra("M_Name",ss.getM_Name());
+                    appInfo.putExtra("M_Time",ss.getM_Time());
+
+                    startActivity(appInfo);
+
+                }
+
+
+
 
                 //startActivityForResult(appInfo,1);
 
             }
         });
-
-
-
 
 
 

@@ -1,6 +1,9 @@
 package com.utsavrajvir.arham;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,6 +99,20 @@ public class Sub_Category extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
+                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+                if(netInfo == null){
+
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(),Network.class);
+                    intent.putExtra("name","First");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+
                 Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
                 //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
@@ -136,6 +153,22 @@ public class Sub_Category extends AppCompatActivity {
 
 
     public void Questions(View view) {
+
+
+
+        ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null){
+
+            finish();
+            Intent intent1 = new Intent(getApplicationContext(),Network.class);
+            intent1.putExtra("name","First");
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent1);
+
+        }
 
 
         Intent intent = new Intent(this,Instruction.class);

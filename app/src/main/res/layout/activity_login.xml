@@ -8,6 +8,7 @@
     android:background="@color/colorModified"
     android:theme="@style/AppTheme1">
 
+
     <TextView
         android:id="@+id/login_arham"
         android:layout_width="match_parent"
@@ -40,7 +41,8 @@
         android:drawableLeft="@drawable/ic_email_black_24dp"
         android:drawableStart="@drawable/ic_email_black_24dp"
         android:hint=" Email address/username"
-        android:inputType="textEmailAddress" />
+        android:singleLine="true"
+         />
 
     <EditText
         android:id="@+id/login_password"
@@ -69,6 +71,8 @@
         android:onClick="login"/>
 
 
+
+
     <RelativeLayout
         android:layout_below="@+id/login_btnsignin"
         android:layout_width="match_parent"
@@ -82,7 +86,8 @@
             android:layout_height="wrap_content"
             android:text="Forget Password?"
             android:layout_marginTop="20dp"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            />
 
         <TextView
             android:id="@+id/login_signup"
@@ -94,6 +99,8 @@
             android:onClick="login_signin"/>
 
     </RelativeLayout>
+
+
 
 
     <ProgressBar

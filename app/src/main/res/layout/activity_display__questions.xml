@@ -25,13 +25,14 @@
             android:background="@color/colorPrimary"
             />
 
+
         <TextView
             android:padding="10dp"
             android:id="@+id/text_toolbar"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Utsav"
+            android:text="Test"
             android:textStyle="bold"
             android:textAppearance="?android:textAppearanceLarge"
             android:shadowColor="#e5e8e1"
@@ -44,10 +45,30 @@
         android:layout_below="@+id/my_toolbar"
         android:id="@+id/question_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp">
 
     </ListView>
 
+    <Button
 
+        android:id="@+id/new_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="End Test"
+        android:background="@drawable/mybutton"
+        android:onClick="submit"
+        />
+
+
+    <ProgressBar
+        android:id="@+id/progress_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -1,7 +1,11 @@
 package com.utsavrajvir.arham;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +35,22 @@ public class testing extends AppCompatActivity {
     ListView listView;
     private View view;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_list_view);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressBar = (ProgressBar)findViewById(R.id.progress_display);
+
+        pref = getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
+        editor  = pref.edit();
 
         listView = (ListView)findViewById(R.id.listview);
         contactAdapter = new ContactAdapter(this,R.layout.row_layout);
@@ -47,6 +62,8 @@ public class testing extends AppCompatActivity {
 
         String s=null;
 
+        progressBar.setVisibility(View.VISIBLE);
+
         BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
@@ -56,6 +73,7 @@ public class testing extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
 
         //json_string = getIntent().getExtras().getString("json_data");
 
@@ -84,25 +102,44 @@ public class testing extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        progressBar.setVisibility(View.GONE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                Contacts ss = (Contacts) parent.getItemAtPosition(position);
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+                NetworkInfo wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if(netInfo == null || wifi == null){
 
 
-                //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
 
-                Intent appInfo = new Intent(getApplicationContext(), category.class);
+                    Intent intent = new Intent(getApplicationContext(),Network.class);
 
-                appInfo.putExtra("M_Cid",ss.getM_Cid());
-                appInfo.putExtra("T_id",ss.getId());
-                //appInfo.putExtra("M_Name",ss.getM_Name());
-                appInfo.putExtra("M_Time",ss.getM_Time());
+                    intent.putExtra("email","Main");
+                    startActivity(intent);
 
-                startActivity(appInfo);
+                }else{
+
+                    Contacts ss = (Contacts) parent.getItemAtPosition(position);
+
+
+                    //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
+
+                    Intent appInfo = new Intent(getApplicationContext(), category.class);
+
+                    appInfo.putExtra("M_Cid",ss.getM_Cid());
+                    appInfo.putExtra("T_id",ss.getId());
+                    //appInfo.putExtra("M_Name",ss.getM_Name());
+                    appInfo.putExtra("M_Time",ss.getM_Time());
+
+                    startActivity(appInfo);
+
+                }
 
                 //startActivityForResult(appInfo,1);
 

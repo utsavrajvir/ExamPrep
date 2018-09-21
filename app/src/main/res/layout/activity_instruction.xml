@@ -6,13 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".Instruction">
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/start_button"
+        tools:ignore="NotSibling">
 
     <TextView
         android:id="@+id/instruction"
-        android:text="Instruction"
+        android:text="Please read the following instructions before proceeding further:\n\n
+1.	Mock test has different questions daily from different sections of the selected exams.\n\n
+2.	Each question has multiple options and one correct answer.\n\n
+3.	Tap on an option to make your selection, and confirm the answer before time runs out to know whether your answer is right or wrong.\n\n
+4.	Tap next to proceed to the next question.\n\n
+5.	Review your score at the end of the mock test, or once you quit the test by tapping the close button. You may now choose to improvise a subject of your choice.\n\n
+At last but not the least, do remember, yes you can. \n"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="15dp"
+        />
 
+    </ScrollView>
 
 
     <RelativeLayout

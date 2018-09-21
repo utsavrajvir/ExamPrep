@@ -1,7 +1,10 @@
 package com.utsavrajvir.arham;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +24,21 @@ public class FirstActivity extends AppCompatActivity {
 
         pref = getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
         editor  = pref.edit();
+
+
+        ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null){
+
+            finish();
+            Intent intent = new Intent(this,Network.class);
+            intent.putExtra("name","First");
+            startActivity(intent);
+
+        }
+
 
         if(pref.getString("result","sry").equals("Exist")) {
             finish();

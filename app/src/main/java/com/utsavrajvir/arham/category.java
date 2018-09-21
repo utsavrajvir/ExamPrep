@@ -1,6 +1,9 @@
 package com.utsavrajvir.arham;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -55,6 +58,22 @@ public class category extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+                if(netInfo == null){
+
+                    finish();
+                    Intent intent1 = new Intent(getApplicationContext(),Network.class);
+                    intent1.putExtra("name","First");
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+
+                }
+
 
                 Intent intent = new Intent(getApplicationContext(),Instruction.class);
                 intent.putExtra("M_id",M_Cid);
@@ -111,6 +130,20 @@ public class category extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+
+                ConnectivityManager conMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+                if(netInfo == null){
+
+                    finish();
+                    Intent intent1 = new Intent(getApplicationContext(),Network.class);
+                    intent1.putExtra("name","First");
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+
+                }
 
                 Contacts ss = (Contacts) parent.getItemAtPosition(position);
 

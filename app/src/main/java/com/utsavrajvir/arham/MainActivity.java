@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity
         /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         TextView name1 = (TextView)header.findViewById(R.id.drawer_username);
         TextView email1 = (TextView)header.findViewById(R.id.drawer_email);
-        name1.setText(name);
-        email1.setText(email);
+        name1.setText(pref.getString("Name","sry"));
+        email1.setText(pref.getString("St_Email","sry"));
 
         //json_string1 = getIntent().getExtras().getString("json_data");
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
                     startActivity(new Intent(getApplicationContext(),Verification.class));
                     // Write your code here to invoke YES event
-                    Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
             alertDialog.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     // Write your code here to invoke NO event
-                    Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
 
                     dialog.cancel();
                 }
@@ -115,10 +115,9 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        progressBar1.setVisibility(View.VISIBLE);
 
         BackgroundTask backgroundTask = new BackgroundTask(this);
-
-        progressBar1.setVisibility(View.VISIBLE);
 
         String s = null;
         try {
@@ -189,31 +188,8 @@ public class MainActivity extends AppCompatActivity
             //smsIntent.putExtra("address", "12125551212");
             smsIntent.putExtra("sms_body",smsEditText);
             startActivity(smsIntent);
-/*
-            // Find the sms_message view.
-            String smsEditText = "I am preparing for Competative 2018  Exam Prep with Arham App. Are you preparing for any competative exam? With Prep App,yes you can. Download today Link...";
-            String smsNumber = "9924848640";
-            // Get the text of the sms message.
-            String sms = smsEditText;
-            // Create the intent.
-            Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-            // Set the data for the intent as the phone number.
-            smsIntent.setData(Uri.parse(smsNumber));
-            // Add the message (sms) with the key ("sms_body").
-            smsIntent.putExtra("sms_body", sms);
-            // If package resolves (target app installed), send intent.
-            if (smsIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(smsIntent);
-            } else {
-                Log.i("sms", "Can't resolve app for ACTION_SENDTO Intent");
-            }
-*/
 
-            /*Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-            sendIntent.setData(Uri.parse("9924848640"));
-            sendIntent.putExtra("sms_body", smsEditText);
-            startActivity(sendIntent);
-*/
+
         } else if (id == R.id.logout) {
             finish();
             session = new Session(this);

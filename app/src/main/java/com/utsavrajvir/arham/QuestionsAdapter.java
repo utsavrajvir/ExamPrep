@@ -53,6 +53,7 @@ public class QuestionsAdapter extends ArrayAdapter {
         QuestionsAdapter.QuestionHolder questionHolder;
         row = convertView;
 final int pos = position;
+
         if(row == null)
         {
             LayoutInflater layoutInflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
