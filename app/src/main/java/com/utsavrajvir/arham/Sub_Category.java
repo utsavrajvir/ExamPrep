@@ -17,14 +17,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Sub_Category extends AppCompatActivity {
 
     String json_string = null;
     JSONObject jsonObject1;
     JSONArray jsonArray1;
-    ContactAdapter contactAdapter;
+    SubCategoryAdapter contactAdapter;
     ListView listView;
     private View view;
     String C_Id, M_Cid,T_Id;
@@ -42,7 +49,7 @@ public class Sub_Category extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView)findViewById(R.id.category_listview);
-        contactAdapter = new ContactAdapter(this,R.layout.row_layout);
+        contactAdapter = new SubCategoryAdapter(this,R.layout.row_layout);
         listView.setAdapter(contactAdapter);
 
 
@@ -55,7 +62,7 @@ public class Sub_Category extends AppCompatActivity {
 
         String s=null;
 
-        BackgroundTask backgroundTask = new BackgroundTask(this);
+        /*BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
             s = backgroundTask.execute("sub_category",C_Id).get();
@@ -63,14 +70,41 @@ public class Sub_Category extends AppCompatActivity {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
+        }*/
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Api.BASE_URL+"maincat/"+M_Cid+"/test/"+T_Id+"/category/"+C_Id+"/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final Api api = retrofit.create(Api.class);
+
+        Call<List<SubCategoryPojo>> call = api.getSubCategory();
+
+        call.enqueue(new Callback<List<SubCategoryPojo>>() {
+
+            @Override
+            public void onResponse(Call<List<SubCategoryPojo>> call, Response<List<SubCategoryPojo>> response) {
+                List<SubCategoryPojo> heroList = response.body();
+
+                for(SubCategoryPojo cs : heroList){
+                    contactAdapter.add(cs);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SubCategoryPojo>> call, Throwable t) {
+
+            }
+        });
 
         //json_string = getIntent().getExtras().getString("json_data");
 
         Toast.makeText(this, M_Cid + " "+ T_Id + " "+C_Id, Toast.LENGTH_SHORT).show();
 
 
-        Sc_id=null;
+      /*  Sc_id=null;
         Sc_Name=null;
         Sc_Time=null;
         try {
@@ -92,6 +126,8 @@ public class Sub_Category extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+*/
+
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,15 +159,12 @@ public class Sub_Category extends AppCompatActivity {
                 appInfo.putExtra("T_id",T_Id);
                 appInfo.putExtra("cat","sub_category1");
 
-                appInfo.putExtra("Sc_Id",ss.getM_Cid());
-                appInfo.putExtra("Sc_Time",ss.getM_Time());
+                appInfo.putExtra("Sc_Id",ss.getMcid());
+                appInfo.putExtra("Sc_Time",ss.getMtime());
                 appInfo.putExtra("C_id",C_Id);
 
 
                 startActivity(appInfo);
-
-
-
 
             }
         });

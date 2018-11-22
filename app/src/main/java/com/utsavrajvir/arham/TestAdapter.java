@@ -8,71 +8,65 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAdapter extends ArrayAdapter {
+public class TestAdapter extends ArrayAdapter {
 
     List list = new ArrayList();
 
-
-    public ContactAdapter(@NonNull Context context, int resource) {
+    public TestAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
 
-
-    public void add(Contacts object) {
-        //super.add(object);
-
+    @Override
+    public void add(@Nullable Object object) {
         list.add(object);
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return super.getCount();
     }
 
     @Nullable
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return super.getItem(position);
+    }
+
+    @Override
+    public int getPosition(@Nullable Object item) {
+        return super.getPosition(item);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
         View row;
-        ContactHolder contactHolder;
+        TestHolder testHolder;
         row = convertView;
-        
-        if(row == null)
-        {
+
+        if(row == null){
+
             LayoutInflater layoutInflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = layoutInflater.inflate(R.layout.row_layout,parent,false);
-            contactHolder = new ContactHolder();
-            contactHolder.M_Cid = (TextView) row.findViewById(R.id.textview);
-
-            row.setTag(contactHolder);
-        }
-        else
+            testHolder = new TestHolder();
+            testHolder.txt1 = (TextView) row.findViewById(R.id.textview);
+            row.setTag(testHolder);
+        }else
         {
-            contactHolder = (ContactHolder)row.getTag();
+            testHolder = (TestHolder) row.getTag();
         }
 
-        Contacts contacts = (Contacts) this.getItem(position);
-        contactHolder.M_Cid.setText(contacts.getMname());
-
+        Test test = (Test) this.getItem(position);
+        testHolder.txt1.setText(test.getName());
         return row;
     }
 
+    static class TestHolder{
 
-    static  class ContactHolder
-    {
-        TextView M_Cid,M_Name,M_Time;
+        TextView txt1,txt2,txt3;
     }
-
-
 }

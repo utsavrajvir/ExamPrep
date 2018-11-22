@@ -8,6 +8,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,7 +28,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -59,6 +70,49 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
 
         String str = voids[0];
 
+        if(str.equals("view1")){
+//            String login_url = "http://192.168.43.93:8096/students/";
+
+            String login_url = "http://192.168.43.93:8096/add/";
+            String  inputLine = "Hello";
+
+            String str1 = voids[1];
+
+            try {
+                URL url = new URL(login_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+
+Log.i("hii",str1);
+
+                OutputStream out = new BufferedOutputStream(httpURLConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                writer.write(str1);
+                writer.close();
+                out.close();
+
+                /*BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                inputLine = in.readLine().toString();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                Log.i("response1",inputLine);
+                */
+                //return inputLine;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return inputLine;
+        }
 
 
         if(str.equals("login"))

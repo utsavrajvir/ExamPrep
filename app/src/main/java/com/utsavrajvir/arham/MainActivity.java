@@ -3,14 +3,10 @@ package com.utsavrajvir.arham;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,13 +20,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    static String json_string1 = null;
+    static List<Contacts> json_string1 = null;
     ProgressBar progressBar1;
 
     SharedPreferences pref;
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
         progressBar1.setVisibility(View.VISIBLE);
 
-        BackgroundTask backgroundTask = new BackgroundTask(this);
+      /*  BackgroundTask backgroundTask = new BackgroundTask(this);
 
         String s = null;
         try {
@@ -125,20 +128,60 @@ public class MainActivity extends AppCompatActivity
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+*/
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Api.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final Api api = retrofit.create(Api.class);
+
+        Call<List<Contacts>> call = api.getHeroes();
+
+        call.enqueue(new Callback<List<Contacts>>() {
+            @Override
+            public void onResponse(Call<List<Contacts>> call, Response<List<Contacts>> response) {
+
+                StringBuffer stringBuffer = new StringBuffer();
+
+                List<Contacts> heroList = response.body();
+
+                ViewPager vp_pages= (ViewPager) findViewById(R.id.vp_pages);
+                FragmentAdapter pagerAdapter=new FragmentAdapter(getSupportFragmentManager(),heroList);
+                vp_pages.setAdapter(pagerAdapter);
+
+
+                TabLayout tbl_pages= (TabLayout) findViewById(R.id.tbl_pages);
+                tbl_pages.setupWithViewPager(vp_pages);
+
+                for(Contacts ls : heroList){
+
+                    stringBuffer.append(ls.getMname()+"\n");
+
+                }
+                //l lst.setAdapter(new ArrayAdapter<JSONObject>(getApplicationContext(), android.R.layout.simple_list_item_1, heroList));
+            }
+
+            @Override
+            public void onFailure(Call<List<Contacts>> call, Throwable t) {
+
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        });
 
         progressBar1.setVisibility(View.GONE);
 
-        json_string1 = s.toString();
+        //json_string1 = s.toString();
 
-
-        ViewPager vp_pages= (ViewPager) findViewById(R.id.vp_pages);
-        FragmentAdapter pagerAdapter=new FragmentAdapter(getSupportFragmentManager(),json_string1);
+       /* ViewPager vp_pages= (ViewPager) findViewById(R.id.vp_pages);
+        FragmentAdapter pagerAdapter=new FragmentAdapter(getSupportFragmentManager(),s);
         vp_pages.setAdapter(pagerAdapter);
+
 
         TabLayout tbl_pages= (TabLayout) findViewById(R.id.tbl_pages);
         tbl_pages.setupWithViewPager(vp_pages);
-
-
+*/
     }
 
     @Override

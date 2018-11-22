@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,13 +14,22 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignUp extends AppCompatActivity {
 
@@ -69,10 +80,12 @@ ArrayList<String> al = new ArrayList<String>();
             startActivity(intent);
             return;
 
+
         } else {
 
             progressBar.setVisibility(View.VISIBLE);
-            BackgroundTask backgroundTask = new BackgroundTask(this);
+
+           /* BackgroundTask backgroundTask = new BackgroundTask(this);
             try {
                 s = backgroundTask.execute("check").get();
 
@@ -102,13 +115,46 @@ ArrayList<String> al = new ArrayList<String>();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+*/
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Api.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final Api api = retrofit.create(Api.class);
+
+            Call<List<LoginPojo>> call = api.checkRegistration();
+
+            call.enqueue(new Callback<List<LoginPojo>>() {
+                @Override
+                public void onResponse(Call<List<LoginPojo>> call, Response<List<LoginPojo>> response) {
+
+                    StringBuffer stringBuffer = new StringBuffer();
+
+                    List<LoginPojo> heroList = response.body();
+
+                    for(LoginPojo ls : heroList){
+
+                        al.add(ls.getStuname());
+                        al.add(ls.getStemail());
+
+                    }
+                    //l lst.setAdapter(new ArrayAdapter<JSONObject>(getApplicationContext(), android.R.layout.simple_list_item_1, heroList));
+                }
+
+                @Override
+                public void onFailure(Call<List<LoginPojo>> call, Throwable t) {
+
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
-            String name1 = name.getText().toString().trim();
-            String username1 = username.getText().toString().trim();
-            String email1 = email.getText().toString().trim();
-            String password1 = password.getText().toString().trim();
-            String mobile1 = mobile.getText().toString().trim();
+            final String name1 = name.getText().toString().trim();
+            final String username1 = username.getText().toString().trim();
+            final String email1 = email.getText().toString().trim();
+            final String password1 = password.getText().toString().trim();
+            final String mobile1 = mobile.getText().toString().trim();
 
 
             if (TextUtils.isEmpty(name1)) {
@@ -153,9 +199,37 @@ ArrayList<String> al = new ArrayList<String>();
                 password.requestFocus();
                 return;
             } else {
-                BackgroundTask backgroundTask1 = new BackgroundTask(this);
+                /*BackgroundTask backgroundTask1 = new BackgroundTask(this);
                 backgroundTask1.execute("SignUp",name1,username1,email1,password1,mobile1);
+*/
 
+                Retrofit retrofit1 = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final Api api1 = retrofit1.create(Api.class);
+
+                LoginPojo loginPojo = new LoginPojo(0,name1,username1,email1,password1,mobile1,"","");
+
+                Call<ResponseBody> call1 = RetroClient
+                        .getInstance()
+                        .getApi()
+                        .registration(loginPojo);
+                call1.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        Toast.makeText(SignUp.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                });
 
                 Intent intent = new Intent(this,LoginActivity.class);
                 intent.putExtra("name",pref.getString("Name","sry"));

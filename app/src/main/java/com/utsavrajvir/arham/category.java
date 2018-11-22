@@ -19,7 +19,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class category extends AppCompatActivity {
 
@@ -27,7 +34,7 @@ public class category extends AppCompatActivity {
     String json_string = null;
     JSONObject jsonObject1;
     JSONArray jsonArray1;
-    ContactAdapter contactAdapter;
+    CategoryAdapter contactAdapter;
     ListView listView;
     private View view;
     String T_id,M_Cid,M_Time;
@@ -41,19 +48,14 @@ public class category extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView)findViewById(R.id.category_listview);
-        contactAdapter = new ContactAdapter(this,R.layout.row_layout);
+        contactAdapter = new CategoryAdapter(this,R.layout.row_layout);
         listView.setAdapter(contactAdapter);
 
         button = (Button)findViewById(R.id.new_button);
 
-
-
         T_id = getIntent().getExtras().getString("T_id");
          M_Cid = getIntent().getExtras().getString("M_Cid");
         M_Time = getIntent().getExtras().getString("M_Time");
-
-
-
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +76,6 @@ public class category extends AppCompatActivity {
 
                 }
 
-
                 Intent intent = new Intent(getApplicationContext(),Instruction.class);
                 intent.putExtra("M_id",M_Cid);
                 intent.putExtra("T_id",T_id);
@@ -85,10 +86,9 @@ public class category extends AppCompatActivity {
             }
         });
 
-
         String s=null;
 
-        BackgroundTask backgroundTask = new BackgroundTask(this);
+       /* BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
             s = backgroundTask.execute("category",M_Cid).get();
@@ -96,14 +96,39 @@ public class category extends AppCompatActivity {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //json_string = getIntent().getExtras().getString("json_data");
 
-        Toast.makeText(this, M_Cid + " " + M_Time + " "+T_id, Toast.LENGTH_SHORT).show();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Api.BASE_URL+"maincat/"+M_Cid+"/"+"test/"+T_id+"/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        final Api api = retrofit.create(Api.class);
 
-        String C_id=null;
+        Call<List<CategoryPojo>> call = api.getCategory();
+
+        call.enqueue(new Callback<List<CategoryPojo>>() {
+            @Override
+            public void onResponse(Call<List<CategoryPojo>> call, Response<List<CategoryPojo>> response) {
+
+                List<CategoryPojo> heroList = response.body();
+
+                for(CategoryPojo cs : heroList){
+                        contactAdapter.add(cs);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryPojo>> call, Throwable t) {
+
+            }
+        });
+
+       // Toast.makeText(this, M_Cid + " " + M_Time + " "+T_id, Toast.LENGTH_SHORT).show();
+
+       /* String C_id=null;
         String C_Name=null;
         String C_Time=null;
         try {
@@ -124,7 +149,7 @@ public class category extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -145,22 +170,21 @@ public class category extends AppCompatActivity {
 
                 }
 
-                Contacts ss = (Contacts) parent.getItemAtPosition(position);
-
+                CategoryPojo categoryPojo = (CategoryPojo) parent.getItemAtPosition(position);
+                //Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
                 //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
 
                 Intent appInfo = new Intent(getApplicationContext(), Sub_Category.class);
 
-                appInfo.putExtra("C_Id",ss.getM_Cid());
+                appInfo.putExtra("C_Id",categoryPojo.getCid());//ss.getMcid()
                 appInfo.putExtra("M_Cid",M_Cid);
                 appInfo.putExtra("T_Id",T_id);
-                appInfo.putExtra("C_Time",ss.getM_Time());
+                appInfo.putExtra("C_Time",categoryPojo.getCtime());//ss.getMtime()
                 appInfo.putExtra("cat","category");
                 startActivity(appInfo);
 
                 //startActivityForResult(appInfo,1);
-
             }
         });
 

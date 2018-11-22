@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class testing extends AppCompatActivity {
 
@@ -34,7 +42,7 @@ public class testing extends AppCompatActivity {
     ContactAdapter contactAdapter;
     ListView listView;
     private View view;
-
+    String M_Time;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
@@ -58,13 +66,13 @@ public class testing extends AppCompatActivity {
 
 
         String M_Cid = getIntent().getExtras().getString("M_Cid");
-        String M_Time = getIntent().getExtras().getString("M_Time");
+         M_Time = getIntent().getExtras().getString("M_Time");
 
         String s=null;
 
         progressBar.setVisibility(View.VISIBLE);
 
-        BackgroundTask backgroundTask = new BackgroundTask(this);
+/*        BackgroundTask backgroundTask = new BackgroundTask(this);
 
         try {
             s = backgroundTask.execute("test",M_Cid).get();
@@ -73,6 +81,37 @@ public class testing extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+*/
+       String str1 = Api.BASE_URL+"/maincats/"+M_Cid+"/";
+
+        Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(str1)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Log.i("str1",str1);
+        final Api api = retrofit.create(Api.class);
+
+        Call<List<Test>> call = api.getTesting();
+
+        call.enqueue(new Callback<List<Test>>() {
+            @Override
+            public void onResponse(Call<List<Test>> call, Response<List<Test>> response) {
+
+                 List<Test> heroList = response.body();
+
+                for(Test cs : heroList){
+                    contactAdapter.add(cs);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Test>> call, Throwable t) {
+
+            }
+        });
 
 
         //json_string = getIntent().getExtras().getString("json_data");
@@ -80,7 +119,7 @@ public class testing extends AppCompatActivity {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
 
-        String T_id=null;
+       /* String T_id=null;
 //        String M_Tid=null;
 //        String M_Time1=null;
         try {
@@ -100,7 +139,7 @@ public class testing extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         progressBar.setVisibility(View.GONE);
 
@@ -116,41 +155,32 @@ public class testing extends AppCompatActivity {
 
                 if(netInfo == null || wifi == null){
 
-
-
                     Intent intent = new Intent(getApplicationContext(),Network.class);
-
                     intent.putExtra("email","Main");
                     startActivity(intent);
 
                 }else{
-
-                    Contacts ss = (Contacts) parent.getItemAtPosition(position);
-
+                    Test test = (Test) parent.getItemAtPosition(position);
+                    //Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
                     //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
 
                     Intent appInfo = new Intent(getApplicationContext(), category.class);
 
-                    appInfo.putExtra("M_Cid",ss.getM_Cid());
-                    appInfo.putExtra("T_id",ss.getId());
+                    appInfo.putExtra("M_Cid",test.getMid());//ss.getMcid()
+                    appInfo.putExtra("T_id",test.getTid());//ss.getId()
                     //appInfo.putExtra("M_Name",ss.getM_Name());
-                    appInfo.putExtra("M_Time",ss.getM_Time());
+                    appInfo.putExtra("M_Time",M_Time);//ss.getMtime()
 
                     startActivity(appInfo);
 
                 }
-
                 //startActivityForResult(appInfo,1);
 
             }
         });
 
-
     }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -21,6 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentOne extends Fragment {
@@ -50,13 +53,14 @@ public class FragmentOne extends Fragment {
         contactAdapter = new ContactAdapter(getContext().getApplicationContext(),R.layout.row_layout);
         listView.setAdapter(contactAdapter);
 
-        json_string = getArguments().getString("json_data");
+        //json_string = getArguments().getString("json_data");
+
+        List<Contacts> ls = FragmentAdapter.list_data;
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
 
                 ConnectivityManager conMgr = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -64,7 +68,6 @@ public class FragmentOne extends Fragment {
                 NetworkInfo wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                 if(netInfo == null || wifi == null ){
-
 
                     Intent intent = new Intent(getContext(),Network.class);
                     intent.putExtra("name","Main");
@@ -75,33 +78,34 @@ public class FragmentOne extends Fragment {
 
                     Contacts ss = (Contacts) parent.getItemAtPosition(position);
 
-
                     //Toast.makeText(getContext().getApplicationContext(), ss.getM_Cid(), Toast.LENGTH_SHORT).show();
 
                     Intent appInfo = new Intent(getContext().getApplicationContext(), testing.class);
 
-                    appInfo.putExtra("M_Cid",ss.getM_Cid());
-                    appInfo.putExtra("M_Name",ss.getM_Name());
-                    appInfo.putExtra("M_Time",ss.getM_Time());
+                    appInfo.putExtra("M_Cid",ss.getMcid());
+                    appInfo.putExtra("M_Name",ss.getMname());
+                    appInfo.putExtra("M_Time",ss.getMtime());
 
                     startActivity(appInfo);
 
                 }
-
-
-
 
                 //startActivityForResult(appInfo,1);
 
             }
         });
 
+        for(Contacts cs : ls){
+            contactAdapter.add(cs);
 
+        }
 
-        String M_Cid=null;
+       /* String M_Cid=null;
         String M_Name=null;
         String M_Time=null;
         try {
+
+           // List<Contacts> ls = new ArrayList<Contacts>(json_string);
             jsonObject1 = new JSONObject(json_string);
             jsonArray1 = jsonObject1.getJSONArray("result");
             int count=0;
@@ -120,8 +124,7 @@ public class FragmentOne extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
+*/
 
 
         return view;

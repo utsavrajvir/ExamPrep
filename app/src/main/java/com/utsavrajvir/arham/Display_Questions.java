@@ -29,7 +29,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Display_Questions extends AppCompatActivity {
 
@@ -50,6 +59,7 @@ public class Display_Questions extends AppCompatActivity {
     SharedPreferences.Editor editor;
     JSONArray jsonArray;
     ProgressBar progressBar;
+    List<Questions> questionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +70,7 @@ public class Display_Questions extends AppCompatActivity {
         setSupportActionBar(mTopToolbar);
 
         progressBar = (ProgressBar)findViewById(R.id.progress_question);
-
+questionsList = new ArrayList<Questions>();
         radio = (RadioGroup)findViewById(R.id.radioGroup);
 
         pref = getSharedPreferences(LoginActivity.MYPREF,MODE_PRIVATE);
@@ -193,42 +203,121 @@ public class Display_Questions extends AppCompatActivity {
 
         BackgroundTask backgroundTask = new BackgroundTask(this);
 
-        try {
+        //try {
             if(cat.equals("category"))
             {
                 Toast.makeText(this, "Enter....Mid = "+M_Cid+" T_id = "+T_id, Toast.LENGTH_SHORT).show();
                 M_Time = getIntent().getExtras().getString("M_Time");
-                s = backgroundTask.execute("question2",M_Cid,T_id).get();
 
-                Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+                //s = backgroundTask.execute("question2",M_Cid,T_id).get();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL+"maincat/"+M_Cid+"/"+"test/"+T_id+"/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final Api api = retrofit.create(Api.class);
+
+                Call<List<Questions>> call = api.getMainSection();
+
+                call.enqueue(new Callback<List<Questions>>() {
+                    @Override
+                    public void onResponse(Call<List<Questions>> call, Response<List<Questions>> response) {
+
+                        List<Questions> heroList = response.body();
+
+                        for(Questions cs : heroList){
+                            questionsAdapter.add(cs);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Questions>> call, Throwable t) {
+
+                    }
+                });
+
+                //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             }
             else if(cat.equals("sub_category"))
             {
                 C_Time = getIntent().getExtras().getString("C_Time");
                 String C_id = getIntent().getExtras().getString("C_id");
-                s = backgroundTask.execute("question3",M_Cid,T_id,C_id).get();
+                //s = backgroundTask.execute("question3",M_Cid,T_id,C_id).get();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL+"maincat/"+M_Cid+"/"+"test/"+T_id+"/category/"+C_id)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final Api api = retrofit.create(Api.class);
+
+                Call<List<Questions>> call = api.getCategoryQuestion();
+
+                call.enqueue(new Callback<List<Questions>>() {
+                    @Override
+                    public void onResponse(Call<List<Questions>> call, Response<List<Questions>> response) {
+
+                        List<Questions> heroList = response.body();
+
+                        for(Questions cs : heroList){
+                            questionsAdapter.add(cs);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Questions>> call, Throwable t) {
+
+                    }
+                });
             }
             else if(cat.equals("sub_category1"))
             {
                 Sc_Time = getIntent().getExtras().getString("Sc_Time");
                 Sc_Id = getIntent().getExtras().getString("Sc_id");
                 String C_id = getIntent().getExtras().getString("C_id");
-                s = backgroundTask.execute("question4",M_Cid,T_id,C_id,Sc_Id).get();
+                //s = backgroundTask.execute("question4",M_Cid,T_id,C_id,Sc_Id).get();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Api.BASE_URL+"maincat/"+M_Cid+"/"+"test/"+T_id+"/category/"+C_id+"/subcategory/"+Sc_Id)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final Api api = retrofit.create(Api.class);
+
+                Call<List<Questions>> call = api.getCategoryQuestion();
+
+                call.enqueue(new Callback<List<Questions>>() {
+                    @Override
+                    public void onResponse(Call<List<Questions>> call, Response<List<Questions>> response) {
+
+                        List<Questions> heroList = response.body();
+
+                        for(Questions cs : heroList){
+                            questionsAdapter.add(cs);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Questions>> call, Throwable t) {
+
+                    }
+                });
+
             }
 
-        } catch (InterruptedException e) {
+       /* } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
+*/
 
         //json_string = getIntent().getExtras().getString("json_data");
 
         //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
 
-        String Q_id=null;
+        /*String Q_id=null;
         String question=null;
         String optionA=null;
         String optionB=null;
@@ -259,7 +348,7 @@ public class Display_Questions extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+*/
         progressBar.setVisibility(View.GONE);
 
     }
@@ -388,29 +477,56 @@ public class Display_Questions extends AppCompatActivity {
 
         while(i-- >= 0)
         {
-            JSONObject  json_object  = new JSONObject();
+            /*JSONObject  json_object  = new JSONObject();
             try {
-
+*/
                 questions = (Questions) questionsAdapter.getItem(count++);
+                    questionsList.add(questions);
 
-
-                json_object.put("St_Id", pref.getString("St_Id","-1"));
+  /*              json_object.put("St_Id", pref.getString("St_Id","-1"));
                 json_object.put("Qc_Id", questions.getQ_id());
                 json_object.put("Stud_Answer", questions.getStud_answer());
 
                 //Toast.makeText(this, pref.getString("St_Id","-1") + questions.getQ_id() + questions.getStud_answer(), Toast.LENGTH_SHORT).show();
 
                 jsonArray.put(json_object);
-
-            } catch (JSONException e) {
+*/
+  /*          } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+*/
         }
-        Log.i("json_array1",jsonArray.toString());
+  //      Log.i("json_array1",jsonArray.toString());
 
+/*
         BackgroundTask backgroundTask1 = new BackgroundTask(getApplicationContext());
         backgroundTask1.execute("student_history",jsonArray.toString());
+*/
+
+        Retrofit retrofit1 = new Retrofit.Builder()
+                .baseUrl(RetroClient.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final Api api1 = retrofit1.create(Api.class);
+
+        final Call<ResponseBody> callable = RetroClient
+                .getInstance()
+                .getApi()
+                .submit(questionsList);
+
+        callable.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //Toast.makeText(WebSevice.this, "Success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
 
         Intent intent = new Intent(this,MainActivity.class);
         intent.putExtra("name",pref.getString("Name","sry"));
